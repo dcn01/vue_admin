@@ -6,7 +6,7 @@
                     {{item.title}}
                 </router-link>
                 <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
-            </li>
+            </li>x
         </ul>
         <div class="tags-close-box">
             <el-dropdown @command="handleTags">

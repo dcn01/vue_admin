@@ -16,7 +16,7 @@
                                 </el-menu-item>
                             </el-submenu>
                             <el-menu-item v-else :index="subItem.index" :key="subItem.index">
-                                {{ subItem.title }}
+                                  {{ subItem.title }}
                             </el-menu-item>
                         </template>
                     </el-submenu>
@@ -41,12 +41,12 @@
                     {
                         icon: 'el-icon-lx-home',
                         index: 'dashboard',
-                        title: '系统首页'
+                        title: '个人信息'
                     },
                     {
                         icon: 'el-icon-lx-cascades',
                         index: 'table',
-                        title: '基础表格'
+                        title: '密码管理'
                     },
                     {
                         icon: 'el-icon-lx-copy',
