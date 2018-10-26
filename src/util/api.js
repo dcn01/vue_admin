@@ -1,6 +1,5 @@
 
 import axios from 'axios';
-import {Message} from 'element-ui';
 import qs from 'qs';
 
 /*axios.interceptors.request.use(config => {
@@ -36,7 +35,6 @@ axios.interceptors.response.use(data => {
 });*/
 let base = 'http://localhost:8002';
 export const postRequest = (url, params,elseHeaders) => {
-
     const data = qs.stringify(params);
     var headers={
         'Content-Type': 'application/x-www-form-urlencoded'

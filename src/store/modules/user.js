@@ -1,5 +1,6 @@
-import {loginByUsername, logout, getUserInfo} from '@/api/login'
-import {getToken, setToken, removeToken} from '@/utils/auth'
+
+import {getToken, setToken, removeToken} from '@/util/auth'
+import {postRequest} from '@/util/api'
 
 const user = {
     state: {
@@ -65,18 +66,19 @@ const user = {
                 const data = {
                     token: state.token
                 };
-                this.postRequest('/sys/user/info', data, null).then(res => {
+                postRequest('/sys/user/info', data, null).then(res => {
                     res = res.data;
                     if (res.ret && res.data) {
-                        if (res.data.roles && res.data.roles > 0) {
-                            commit('SET_ROLES', res.data.roles)
+                        if (res.data.roles && res.data.roles.length > 0) {
+                            commit('SET_ROLES', res.data.roles);
+                            commit('SET_NAME', res.data.name);
+                            commit('SET_AVATAR', res.data.avatar);
+                            commit('SET_INTRODUCTION', res.data.introduction)
                         } else {
                             reject('getInfo: roles must be a non-null array !')
                         }
-                        commit('SET_NAME', data.name);
-                        commit('SET_AVATAR', data.avatar);
-                        commit('SET_INTRODUCTION', data.introduction);
-                        resolve(response)
+
+                        resolve(res)
                     }
                 }).catch(error => {
                     reject(error)
@@ -102,14 +104,14 @@ const user = {
         // 登出
         LogOut({commit, state}) {
             return new Promise((resolve, reject) => {
-                logout(state.token).then(() => {
+                /*logout(state.token).then(() => {
                     commit('SET_TOKEN', '');
                     commit('SET_ROLES', []);
                     removeToken();
                     resolve()
                 }).catch(error => {
                     reject(error)
-                })
+                })*/
             })
         },
 
@@ -122,23 +124,7 @@ const user = {
             })
         },
 
-        // 动态修改权限
-        ChangeRoles({commit, dispatch}, role) {
-            return new Promise(resolve => {
-                commit('SET_TOKEN', role);
-                setToken(role);
-                getUserInfo(role).then(response => {
-                    const data = response.data;
-                    commit('SET_ROLES', data.roles);
-                    commit('SET_NAME', data.name);
-                    commit('SET_AVATAR', data.avatar);
-                    commit('SET_INTRODUCTION', data.introduction);
-                    dispatch('GenerateRoutes', data); // 动态修改权限后 重绘侧边菜单
-                    resolve()
-                })
-            })
-        }
     }
-}
+};
 
 export default user

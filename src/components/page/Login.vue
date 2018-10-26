@@ -28,7 +28,7 @@
 
 <script>
 
-    import {setToken} from '/src/util/auth'
+    import {setToken} from '@/util/auth'
 
     export default {
         data: function () {
