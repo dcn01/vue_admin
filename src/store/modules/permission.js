@@ -20,7 +20,6 @@ function hasPermission(roles, route) {
  */
 function filterAsyncRouter(routes, roles) {
     const res = [];
-    debugger;
     routes.forEach(route => {
         const tmp = {...route};
         if (hasPermission(roles, tmp)) {
@@ -29,7 +28,7 @@ function filterAsyncRouter(routes, roles) {
             }
             res.push(tmp)
         }
-    })
+    });
 
     return res
 }
@@ -50,7 +49,6 @@ const permission = {
             return new Promise(resolve => {
                 const {roles} = data;
                 let accessedRouters;
-                debugger;
                 if (roles.includes('admin')) {
                     accessedRouters = asyncRouterMap
                 } else {

@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     modules: {
         permission,
-        user
+        user,
+        sidebar
     },
     getters
 });
