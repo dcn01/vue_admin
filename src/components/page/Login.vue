@@ -59,9 +59,6 @@
                             password:this.ruleForm.password
                         };
 
-                       /* this.$http.post(url, data,{headers:{'access_token':'8859'}}).then(this.loginInfoSucc).catch(error => {
-                            console.log('网络错误，不能访问');
-                        });*/
                        this.postRequest('/sys/log/login',data,null).then(this.loginInfoSucc);
 
                     } else {
@@ -73,8 +70,8 @@
             loginInfoSucc(res) {
                 res = res.data;
                 if (res.ret && res.data) {
-                    this.$store.commit('SET_TOKEN',res.data.token);
-                    setToken(res.data.token);
+                    this.$store.commit('SET_TOKEN',res.data);
+                    setToken(res.data);
                     //localStorage.setItem('ms_username', res.data.username);
                     this.$router.push('/');
                 }else {

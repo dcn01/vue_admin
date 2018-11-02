@@ -1,8 +1,9 @@
 
 import axios from 'axios';
 import qs from 'qs';
+import {Message} from 'element-ui'
 
-/*axios.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {
     return config;
 }, err => {
     Message.error({message: '请求超时!'});
@@ -32,7 +33,7 @@ axios.interceptors.response.use(data => {
         }
     }
     // return Promise.resolve(err);
-});*/
+});
 let base = 'http://localhost:8002';
 export const postRequest = (url, params,elseHeaders) => {
     const data = qs.stringify(params);

@@ -24,13 +24,13 @@ export const constantRouterMap = [
     {
         path: '/',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '个人信息' },
+        meta: { title: '个人信息',icon: 'el-icon-lx-home' },
         redirect: '/dashboard',
         children:[
             {
                 path: '/dashboard',
                 component: resolve => require(['../components/page/Dashboard.vue'], resolve),
-                meta: { title: '个人信息' }
+                meta: { title: '个人信息' ,icon: 'el-icon-lx-home'}
             },
 
         ]
@@ -42,12 +42,12 @@ export const asyncRouterMap = [
     {
         path: '/password',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '自述文件' },
+        meta: { title: '自述文件',icon: 'el-icon-lx-home' },
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/BaseTable.vue'], resolve),
-                meta: { title: '密码管理',roles:['admin']}
+                meta: { title: '密码管理',icon: 'el-icon-lx-home'}
             }
         ]
     },
@@ -55,12 +55,12 @@ export const asyncRouterMap = [
     {
         path: '/tabs',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: 'tab选项卡' },
+        meta: { title: 'tab选项卡' ,icon: 'el-icon-lx-home'},
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/Tabs.vue'], resolve),
-                meta: { title: 'tab选项卡' }
+                meta: { title: 'tab选项卡' ,icon: 'el-icon-lx-home'}
             }
 
         ]
@@ -68,34 +68,34 @@ export const asyncRouterMap = [
     {
         path: '/form',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '表单相关' },
+        meta: { title: '表单相关' ,icon: 'el-icon-lx-home'},
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/BaseForm.vue'], resolve),
-                meta: { title: '基本表单' }
+                meta: { title: '基本表单',icon: 'el-icon-lx-home'}
             },
             {
                 path: 'page',
                 component: resolve => require(['../components/page/VueEditor.vue'], resolve),
-                meta: { title: '三级菜单' },
+                meta: { title: '三级菜单',icon: 'el-icon-lx-home'},
                 children:[
                     {
                         path: 'editor',
                         component: resolve => require(['../components/page/VueEditor.vue'], resolve),
-                        meta: { title: '富文本编辑器' }
+                        meta: { title: '富文本编辑器',roles:['editor'],icon: 'el-icon-lx-home'}
                     },
                     {
                         path: 'markdown',
                         component: resolve => require(['../components/page/Markdown.vue'], resolve),
-                        meta: { title: 'markdown编辑器' }
+                        meta: { title: 'markdown编辑器',roles:['editor'],icon: 'el-icon-lx-home'}
                     }
                 ]
             },
             {
                 path: 'upload',
                 component: resolve => require(['../components/page/Upload.vue'], resolve),
-                meta: { title: '文件上传' }
+                meta: { title: '文件上传' ,icon: 'el-icon-lx-home'}
             }
 
         ]
@@ -103,12 +103,12 @@ export const asyncRouterMap = [
     {
         path: '/icon',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '自定义图标' },
+        meta: { title: '自定义图标' ,icon: 'el-icon-lx-home'},
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/Icon.vue'], resolve),
-                meta: { title: '自定义图标' }
+                meta: { title: '自定义图标',roles:['editor'],icon: 'el-icon-lx-home'}
             }
 
         ]
@@ -117,12 +117,12 @@ export const asyncRouterMap = [
     {
         path: '/charts',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: 'schart图表' },
+        meta: { title: 'schart图表',icon: 'el-icon-lx-home' },
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
-                meta: { title: 'schart图表' }
+                meta: { title: 'schart图表',roles:['editor'],icon: 'el-icon-lx-home'}
             }
 
         ]
@@ -130,12 +130,12 @@ export const asyncRouterMap = [
     {
         path: '/drag',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '拖拽列表' },
+        meta: { title: '拖拽列表',icon: 'el-icon-lx-home' },
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/DragList.vue'], resolve),
-                meta: { title: '拖拽列表' }
+                meta: { title: '拖拽列表' ,icon: 'el-icon-lx-home'}
             }
 
         ]
@@ -144,17 +144,17 @@ export const asyncRouterMap = [
     {
         path: '/permission',
         component: resolve => require(['../components/common/Home.vue'], resolve),
-        meta: { title: '权限管理' },
+        meta: { title: '权限管理',roles:['admin'],icon: 'el-icon-lx-home' },
         children:[
             {
                 path: 'index',
                 component: resolve => require(['../components/page/Permission.vue'], resolve),
-                meta: { title: '权限测试',roles:['admin'] }
+                meta: { title: '权限测试',roles:['admin'],icon: 'el-icon-lx-home'}
             },
             {
                 path: '404',
                 component: resolve => require(['../components/page/404.vue'], resolve),
-                meta: { title: '404' }
+                meta: { title: '404',roles:['admin'],icon: 'el-icon-lx-home' }
             }
 
         ]

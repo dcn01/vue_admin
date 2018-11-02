@@ -87,6 +87,7 @@
 <script>
     export default {
         name: 'basetable',
+        inject:['reload'],
         data() {
             return {
                 tableData: [],
@@ -117,6 +118,7 @@
         },
         mounted() {
             this.getData();
+            this.$store.dispatch("updateNoCache",'');
         },
         methods: {
             // 分页导航
@@ -124,21 +126,17 @@
                 this.currentPage = val;
                 this.getData();
             },
-            // 获取 easy-mock 的模拟数据
             getData() {
-                // 开发环境使用 easy-mock 数据，正式环境使用 json 文件
                 const url = '/password/details?page=' + this.currentPage + "&rows=" + this.totalCount;
                 this.getRequest(url).then(res => {
                     res = res.data;
                     if (res.ret && res.data) {
-                        this.tableData = res.data
+                        this.tableData = res.data;
                         this.tableTotal = res.total;
                     }
                 }).catch(error => {
                     console.log('网络错误，不能访问');
-                });
-                this.$http.get(url, data)
-
+                })
             },
             handleSelectionChange(val) {
                 this.multipleSelection=val;
@@ -187,10 +185,12 @@
                         res = res.data;
                         if (res.ret) {
                             this.editVisible=false;
-                            this.getData();
+                            this.$store.dispatch("updateNoCache",this.$route.matched[1].components.default.name);
+                            this.reload();
                         }
                     }
-                )
+                );
+
             },
             delAll: function(){
 

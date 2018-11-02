@@ -45,18 +45,19 @@
 </template>
 <script>
     import bus from '../common/bus';
+    import {getToken, setToken, removeToken} from '@/util/auth'
     export default {
         data() {
             return {
                 collapse: false,
                 fullscreen: false,
-                name: 'linxin',
+                name: '管理员',
                 message: 2
             }
         },
         computed:{
             username(){
-                let username = localStorage.getItem('ms_username');
+                let username = this.$store.getters.name;
                 return username ? username : this.name;
             }
         },
@@ -64,7 +65,9 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
+                    removeToken();
+                    this.$store.commit('SET_TOKEN', '');
+                    this.$store.commit('SET_ROLES', [])
                     this.$router.push('/login');
                 }
             },
