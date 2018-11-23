@@ -17,6 +17,7 @@
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
+                <el-checkbox  class="remember_me" v-model="ruleForm.remember" >记住我</el-checkbox>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
@@ -28,14 +29,14 @@
 
 <script>
 
-    import {setToken} from '@/util/auth'
 
     export default {
         data: function () {
             return {
                 ruleForm: {
                     username: '',
-                    password: ''
+                    password: '',
+                    remember:false
                 },
                 isShow:false,
                 rules: {
@@ -52,15 +53,12 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        const url='http://localhost:8002/sys/log/login';
-                        //const url='/static/json/User.json';
                         const data= {
                             username: this.ruleForm.username,
-                            password:this.ruleForm.password
+                            password:this.ruleForm.password,
+                            remember:this.ruleForm.remember
                         };
-
-                       this.postRequest('/sys/log/login',data,null).then(this.loginInfoSucc);
-
+                       this.postRequest('/sys/login',data,null).then(this.loginInfoSucc);
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -68,11 +66,8 @@
                 });
             },
             loginInfoSucc(res) {
-                res = res.data;
                 if (res.ret && res.data) {
                     this.$store.commit('SET_TOKEN',res.data);
-                    setToken(res.data);
-                    //localStorage.setItem('ms_username', res.data.username);
                     this.$router.push('/');
                 }else {
                     this.ruleForm.username='';
@@ -144,6 +139,10 @@
         text-align: center;
         background: #eee;
         color: red;
+    }
+    .remember_me {
+        text-align: center;
+        padding-bottom: 20px;
 
     }
 </style>

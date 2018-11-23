@@ -1,6 +1,7 @@
 
 import {getToken, setToken, removeToken} from '@/util/auth'
 import {postRequest} from '@/util/api'
+import axios from 'axios';
 
 const user = {
     state: {
@@ -22,6 +23,7 @@ const user = {
             state.code = code
         },
         SET_TOKEN: (state, token) => {
+            setToken(token);
             state.token = token
         },
         SET_INTRODUCTION: (state, introduction) => {
@@ -45,29 +47,11 @@ const user = {
     },
 
     actions: {
-        // 用户名登录
-        /*LoginByUsername({ commit }, userInfo) {
-          const username = userInfo.username.trim()
-          return new Promise((resolve, reject) => {
-            loginByUsername(username, userInfo.password).then(response => {
-              const data = response.data
-              commit('SET_TOKEN', data.token)
-              setToken(response.data.token)
-              resolve()
-            }).catch(error => {
-              reject(error)
-            })
-          })
-        },*/
 
         // 获取用户信息
         GetUserInfo({commit, state}) {
             return new Promise((resolve, reject) => {
-                const data = {
-                    token: state.token
-                };
-                postRequest('/sys/user/info', data, null).then(res => {
-                    res = res.data;
+                axios.get('/api/sys/user/info').then(res => {
                     if (res.ret && res.data) {
                         if (res.data.roles && res.data.roles.length > 0) {
                             commit('SET_ROLES', res.data.roles);
@@ -87,19 +71,7 @@ const user = {
             })
         },
 
-        // 第三方验证登录
-        // LoginByThirdparty({ commit, state }, code) {
-        //   return new Promise((resolve, reject) => {
-        //     commit('SET_CODE', code)
-        //     loginByThirdparty(state.status, state.email, state.code).then(response => {
-        //       commit('SET_TOKEN', response.data.token)
-        //       setToken(response.data.token)
-        //       resolve()
-        //     }).catch(error => {
-        //       reject(error)
-        //     })
-        //   })
-        // },
+
 
         // 登出
         LogOut({commit, state}) {

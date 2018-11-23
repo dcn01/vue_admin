@@ -8,9 +8,9 @@
         <div class="container">
             <div class="handle-box">
                 <el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="select_cate" placeholder="筛选查询条件" class="handle-select mr10">
+                    <el-option key="1" label="账户描述" value="账户描述"></el-option>
+                    <el-option key="2" label="账户" value="账户"></el-option>
                 </el-select>
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
@@ -86,7 +86,7 @@
 
 <script>
     export default {
-        name: 'basetable',
+        name: 'password',
         inject:['reload'],
         data() {
             return {
@@ -121,21 +121,25 @@
             this.$store.dispatch("updateNoCache",'');
         },
         methods: {
+            
             // 分页导航
             handleCurrentChange(val) {
                 this.currentPage = val;
-                this.getData();
+                if (this.select_word==='') {
+                    this.getData();
+                } else {
+                    this.search();
+                }
+
             },
             getData() {
                 const url = '/password/details?page=' + this.currentPage + "&rows=" + this.totalCount;
                 this.getRequest(url).then(res => {
-                    res = res.data;
+
                     if (res.ret && res.data) {
                         this.tableData = res.data;
                         this.tableTotal = res.total;
                     }
-                }).catch(error => {
-                    console.log('网络错误，不能访问');
                 })
             },
             handleSelectionChange(val) {
@@ -169,20 +173,28 @@
             saveEdit: function () {
 
                 let url ='';
+                let params={};
                 if (this.title==="编辑") {
                     url = '/password/update';
+                    params = {
+                        description: this.form.description,
+                        username: this.form.username,
+                        password: this.form.password,
+                        id:this.form.id
+                    }
+
                 }else if (this.title==="添加") {
                     url = '/password/add';
+                    params = {
+                        description: this.form.description,
+                        username: this.form.username,
+                        password: this.form.password
+                    };
                 }else {
                     return;
                 }
-                const params = {
-                    description: this.form.description,
-                    username: this.form.username,
-                    password: this.form.password
-                };
+
                 this.postRequest(url, params, null).then(res => {
-                        res = res.data;
                         if (res.ret) {
                             this.editVisible=false;
                             this.$store.dispatch("updateNoCache",this.$route.matched[1].components.default.name);
@@ -217,13 +229,33 @@
             deletePassword:function (params) {
                 const url='/password/delete';
                 this.postRequest(url,params,null).then(res=>{
-                    res = res.data;
                     if (res.ret) {
                         this.delVisible=false;
                         this.getData();
                         this.$message.success('删除成功');
                     }
                 })
+            },
+            search:function () {
+                let searchType;
+                if (this.select_cate===''||this.select_cate==='账户描述') {
+                    searchType=1
+                }else {
+                    searchType=2;
+                }
+                const params = {
+                    searchType : searchType,
+                    selectWord: this.select_word,
+                    page: this.currentPage,
+                    rows: this.totalCount
+                };
+                this.postRequest('/password/select',params,null).then(res=> {
+                    if (res.ret && res.data) {
+                        this.tableData = res.data;
+                        this.tableTotal = res.total;
+                    }
+                })
+
             }
 
         }
@@ -237,7 +269,7 @@
     }
 
     .handle-select {
-        width: 120px;
+        width: 130px;
     }
 
     .handle-add {

@@ -46,7 +46,7 @@ export const asyncRouterMap = [
         children:[
             {
                 path: 'index',
-                component: resolve => require(['../components/page/BaseTable.vue'], resolve),
+                component: resolve => require(['../components/page/Password.vue'], resolve),
                 meta: { title: '密码管理',icon: 'el-icon-lx-home'}
             }
         ]

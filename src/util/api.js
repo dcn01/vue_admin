@@ -1,53 +1,81 @@
-
 import axios from 'axios';
 import qs from 'qs';
-import {Message} from 'element-ui'
+import store from '../store'
+import {Loading, Message, MessageBox} from 'element-ui'
+
 
 axios.interceptors.request.use(config => {
     return config;
 }, err => {
     Message.error({message: '请求超时!'});
-    // return Promise.resolve(err);
 });
-axios.interceptors.response.use(data => {
-    if (data.status && data.status == 200 && !data.data.ret) {
-        Message.error({message: data.data.msg});
+
+// 超时时间
+axios.defaults.timeout = 20000;
+// http请求拦截器
+var loadinginstace;
+axios.interceptors.request.use(config => {
+    // element ui Loading方法
+    //loadinginstace = Loading.service({fullscreen: true});
+    return config
+}, error => {
+    //loadinginstace.close();
+    Message.error({
+        message: '加载超时'
+    });
+    return Promise.reject(error)
+});
+
+axios.interceptors.response.use(response => {
+    const data = response.data;
+    if (response.status && !data.ret) {
+        Message.error({message: data.msg});
         return data;
     }
-    if (data.data.msg) {
-        Message.success({message: data.data.msg});
-    }
     return data;
-}, err => {
-    if (err.response.status == 504 || err.response.status == 404) {
-        Message.error({message: '服务器被吃了⊙﹏⊙∥'});
-    } else if (err.response.status == 403) {
-        Message.error({message: '权限不足,请联系管理员!'});
-    } else if (err.response.status == 401) {
-        Message.error({message: err.response.data.msg});
-    } else {
-        if (err.response.data.msg) {
-            Message.error({message: err.response.data.msg});
-        }else{
-            Message.error({message: '未知错误!'});
-        }
+}, error => {
+    debugger;
+    if (error.response.status == 401) {
+        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            store.dispatch('FedLogOut').then(() => {
+                location.reload();
+            });
+        }).catch(()=>{
+            store.dispatch('FedLogOut').then(() => {
+                location.reload();
+            });
+        });
+
+        return Promise.reject('error');
+    }else if (error.response.status == 403) {
+        Message({
+            message: '当前用户无相关操作权限！',
+            type: 'error',
+            duration: 5 * 1000
+        });
+        return Promise.reject('error');
+    }else {
+        Message.error({message: '未知错误!'});
     }
-    // return Promise.resolve(err);
 });
-let base = 'http://localhost:8002';
-export const postRequest = (url, params,elseHeaders) => {
+let base = '/api';
+export const postRequest = (url, params, elseHeaders) => {
     const data = qs.stringify(params);
-    var headers={
+    var headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     };
-    if (elseHeaders)  {
-        for (let type in elseHeaders)  {
-            headers[type]=elseHeaders[type]
+    if (elseHeaders) {
+        for (let type in elseHeaders) {
+            headers[type] = elseHeaders[type]
         }
     }
     return axios({
         method: 'post',
-        url: base+url,
+        url: base + url,
         data: data,
         headers: headers
     });
@@ -66,6 +94,6 @@ export const uploadFileRequest = (url, params) => {
 export const getRequest = (url) => {
     return axios({
         method: 'get',
-        url: base+url,
+        url: base + url,
     });
 };

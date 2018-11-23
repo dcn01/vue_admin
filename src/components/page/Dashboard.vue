@@ -195,9 +195,6 @@
             this.handleListener();
             this.changeDate();
         },
-        mounted() {
-            console.log("bbbbbb");
-        },
         activated(){
             this.handleListener();
         },

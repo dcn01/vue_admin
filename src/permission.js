@@ -7,6 +7,7 @@ import store from './store'
 import { getToken } from './util/auth' // getToken from cookie
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
+import {Message} from 'element-ui'
 
 NProgress.configure({ showSpinner: false });
 
@@ -40,13 +41,12 @@ router.beforeEach((to, from, next) => {
                     })
                 })
             } else {
-                // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
                 if (hasPermission(store.getters.roles, to.meta.roles)) {
                     next()
                 } else {
                     next({ path: '/401', replace: true, query: { noGoBack: true }})
                 }
-                // 可删 ↑
+
             }
         }
     } else {
